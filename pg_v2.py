@@ -423,7 +423,7 @@ def set_init_pause(object):
 # For V or T Step
 def menu_num_p(choice, object):
     if choice == '2' or choice == '3':
-        var1 = int(input('Set num pulses -'))
+        var1 = int(input('Set num pulses - '))
         var2 = float(input('Set start Voltage/Time - '))
         var3 = float(input('Set V/T step - '))
         object.setSteps(var2,  var3, var1)
@@ -561,7 +561,6 @@ def run_app():
         choice = start()
         object = initialise_class(choice)
         set_init_pause(object)
-        menu_num_p(object)
         menu_num_p(choice, object)
         build_dict(object)
         view_pulse(choice, object)
@@ -569,18 +568,8 @@ def run_app():
         ask_view_pulse(choice, object)
         export_pulse(object)
 
-        a = input('Run Again? Y/N'):
-            if a.lower() == 'n':
-                break
+        a = input('Run Again? Y/N')
+        if a.lower() == 'n':
+            break
 
-a = start()
-b = initialise_class(a)
-set_init_pause(b)
-menu_num_p(a, b)
-build_dict(b)
-view_pulse(a, b)
-modify_pulse(a, b)
-ask_view_pulse(a, b)
-build_array(b)
-export_pulse(b)
-
+run_app()
