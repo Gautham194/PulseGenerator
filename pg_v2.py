@@ -294,7 +294,7 @@ class TStep:
 class Custom:
 
     def __init__(self):
-        self.numPulses = 4
+        self.numPulses = 0
         self.pulseRise = 1e-5
         self.pulseFall = 1e-5
         self.init_pause = 0
@@ -319,8 +319,11 @@ class Custom:
         self.numPulses = num
 
     def buildDictEmpty(self):
-        for i in range(self.numPulses):
-            self.pulseDict[str(i + 1)] = []
+        if self.numPulses:
+            for i in range(self.numPulses):
+                self.pulseDict[str(i + 1)] = []
+        else:
+            self.pulseDict = {}
 
     def editPulseInd(self, pulse, arr):
         if pulse in self.pulseDict.keys():
@@ -425,6 +428,11 @@ def menu_num_p(choice, object):
         var3 = float(input('Set V/T step - '))
         object.setSteps(var2,  var3, var1)
 
+# For Custom
+def build_dict_empty(choice, object):
+    if choice == '4':
+        object.buildDictEmpty()
+
 def set_base_params(choice, object):
     if choice == '1':
         v1 = input('Enter Write V - ')
@@ -489,25 +497,81 @@ def modify_pulse(choice, object):
                 var3 = float(input('Enter new value: '))
                 object.editPulse(var1, var2, var3)
 
+    if choice == '4':
+        while True:
+            print('1 - Edit Single Pulse Value')
+            print('2 - Edit full pulse value')
+            print('2 - Add Pulse to end')
+            print('0 - Done.')
+            a = input('Enter Option = ')
+
+            if a == '0':
+                break
+
+            if a == '3':
+                arr = get_array()
+                object.addPulse(arr)
+
+            if a == '1':
+                var1 = int(input('Input pulse number to edit: '))
+                var2 = get_index()
+                var3 = float(input('Enter new value: '))
+                object.editPulse(var1, var2, var3)
+
+            if a == '2':
+                arr = get_array()
+                var1 = int(input('Input pulse number to edit: '))
+                object.editPulseInd(var1, arr)
+
 def build_array(object):
     v1, v2 = object.buildArray()
 
 def export_pulse(object):
 
-    name = input('Input File Name: ')
-    a = str(name)+'.xlsx'
-    workbook = xlsxwriter.Workbook(a)
-    worksheet = workbook.add_worksheet()
+    a = input('Save Pulse Y/N:')
+    if a.lower() == 'y':
+        name = input('Input File Name: ')
+        a = str(name)+'.xlsx'
+        workbook = xlsxwriter.Workbook(a)
+        worksheet = workbook.add_worksheet()
 
-    row = 0
-    col = 0
+        row = 0
+        col = 0
 
-    for time, volt in zip(object.times, object.volts):
-        worksheet.write(row, col, time)
-        worksheet.write(row, col + 1, volt)
-        row += 1
+        for time, volt in zip(object.times, object.volts):
+            worksheet.write(row, col, time)
+            worksheet.write(row, col + 1, volt)
+            row += 1
 
-    workbook.close()
+        workbook.close()
+    else:
+        print(object.getDict())
+
+def ask_view_pulse(choice, object):
+    a = input('View Pulse Y/N')
+    if a.lower() == 'y':
+        view_pulse(choice, object)
+    elif a.lower() != 'n':
+        print('Invalid choice')
+        ask_view_pulse(choice, object)
+
+
+def run_app():
+    while True:
+        choice = start()
+        object = initialise_class(choice)
+        set_init_pause(object)
+        menu_num_p(object)
+        menu_num_p(choice, object)
+        build_dict(object)
+        view_pulse(choice, object)
+        modify_pulse(choice, object)
+        ask_view_pulse(choice, object)
+        export_pulse(object)
+
+        a = input('Run Again? Y/N'):
+            if a.lower() == 'n':
+                break
 
 a = start()
 b = initialise_class(a)
@@ -516,7 +580,7 @@ menu_num_p(a, b)
 build_dict(b)
 view_pulse(a, b)
 modify_pulse(a, b)
-view_pulse(a, b)
+ask_view_pulse(a, b)
 build_array(b)
 export_pulse(b)
 
