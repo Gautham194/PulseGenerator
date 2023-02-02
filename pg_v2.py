@@ -2,6 +2,9 @@ import xlsxwriter
 import numpy as np
 from matplotlib import pyplot as plt
 
+
+# DATA STORED AS V T R F P in dictionary!!!
+
 class PulseGenerator:
 
     def __init__(self):
@@ -73,7 +76,7 @@ class NeuroPulse:
     def viewBaseParams(self):
         print('Volt - Time - Rise - Fall - Pause')
         print('Write Pulse = ', self.baseParamsWrite)
-        print('Read Pulse = ', self. baseParamsRead)
+        print('Read Pulse = ', self.baseParamsRead)
 
     def buildDict(self):
 
@@ -149,7 +152,7 @@ class VStep:
     def viewBaseParams(self):
         print('Volt - Time - Rise - Fall - Pause')
         print('Write Pulse = ', self.baseParamsWrite)
-        print('Read Pulse = ', self. baseParamsRead)
+        print('Read Pulse = ', self.baseParamsRead)
 
     def setSteps(self, start, step, num):
         self.numPulses = num
@@ -232,7 +235,7 @@ class TStep:
     def viewBaseParams(self):
         print('Volt - Time - Rise - Fall - Pause')
         print('Write Pulse = ', self.baseParamsWrite)
-        print('Read Pulse = ', self. baseParamsRead)
+        print('Read Pulse = ', self.baseParamsRead)
 
     def setSteps(self, start, step, num):
         self.numPulses = num
@@ -313,7 +316,7 @@ class Custom:
     def viewBaseParams(self):
         print('Volt - Time - Rise - Fall - Pause')
         print('Write Pulse = ', self.baseParamsWrite)
-        print('Read Pulse = ', self. baseParamsRead)
+        print('Read Pulse = ', self.baseParamsRead)
 
     def setNumPulses(self, num):
         self.numPulses = num
@@ -381,7 +384,6 @@ class Custom:
         plt.show()
 
 
-
 def start():
     while True:
         print('Choose pulse structure:')
@@ -390,7 +392,7 @@ def start():
         print('3 - T Steps')
         print('4 - Custom')
         choice = input('Enter Choice: ')
-        choices = [1,2,3,4]
+        choices = [1, 2, 3, 4]
 
         if choice.isnumeric():
             if int(choice) in choices:
@@ -400,6 +402,7 @@ def start():
                 print('Invalid Choice')
         else:
             print('Invalid Selection')
+
 
 def initialise_class(var):
     var = int(var)
@@ -416,9 +419,11 @@ def initialise_class(var):
         a = Custom()
         return a
 
+
 def set_init_pause(object):
     pause_time = float(input('Set initial hold time - '))
     object.setInitPause(pause_time)
+
 
 # For V or T Step
 def menu_num_p(choice, object):
@@ -426,12 +431,14 @@ def menu_num_p(choice, object):
         var1 = int(input('Set num pulses - '))
         var2 = float(input('Set start Voltage/Time - '))
         var3 = float(input('Set V/T step - '))
-        object.setSteps(var2,  var3, var1)
+        object.setSteps(var2, var3, var1)
+
 
 # For Custom
 def build_dict_empty(choice, object):
     if choice == '4':
         object.buildDictEmpty()
+
 
 def set_base_params(choice, object):
     if choice == '1':
@@ -452,16 +459,19 @@ def set_base_params(choice, object):
         v5 = input('Enter Pause')
         object.setBaseParams(v4, v4, v5, v1)
 
+
 def build_dict(object):
     object.buildDict()
     print('Pulse # : [V, T, Rise, Fall, Pause]')
     print(object.getDict())
+
 
 def view_pulse(choice, object):
     if choice != '4':
         a, b = object.buildArray()
         object.viewPulse()
         object.clearArray()
+
 
 def get_array():
     a = float(input('Input Voltage - '))
@@ -470,6 +480,7 @@ def get_array():
     d = float(input('Input Pause Time - '))
     arr = [a, b, c, c, d]
     return arr
+
 
 def get_index(choice):
     if choice in ['1', '2', '3', '4']:
@@ -525,15 +536,16 @@ def modify_pulse(choice, object):
                 var1 = int(input('Input pulse number to edit: '))
                 object.editPulseInd(var1, arr)
 
+
 def build_array(object):
     v1, v2 = object.buildArray()
 
-def export_pulse(object):
 
+def export_pulse(object):
     a = input('Save Pulse Y/N:')
     if a.lower() == 'y':
         name = input('Input File Name: ')
-        a = str(name)+'.xlsx'
+        a = str(name) + '.xlsx'
         workbook = xlsxwriter.Workbook(a)
         worksheet = workbook.add_worksheet()
 
@@ -549,6 +561,7 @@ def export_pulse(object):
     else:
         print(object.getDict())
 
+
 def ask_view_pulse(choice, object):
     a = input('View Pulse Y/N')
     if a.lower() == 'y':
@@ -556,6 +569,7 @@ def ask_view_pulse(choice, object):
     elif a.lower() != 'n':
         print('Invalid choice')
         ask_view_pulse(choice, object)
+
 
 def ask_modify(choice, object):
     while True:
@@ -582,7 +596,6 @@ def ask_modify(choice, object):
             print('Invalid Selection')
 
 
-
 def run_app():
     while True:
         choice = start()
@@ -596,5 +609,6 @@ def run_app():
         a = input('Run Again? Y/N')
         if a.lower() == 'n':
             break
+
 
 run_app()
