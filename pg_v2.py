@@ -471,10 +471,12 @@ def get_array():
     arr = [a, b, c, c, d]
     return arr
 
-def get_index():
-    print('Voltage - 1 \n Time - 2, \n Rise Time - 3 \n Fall Time - 4 \n Pause Time - 5')
-    var = input('Select Index to Change: ')
-    return int(var)
+def get_index(choice):
+    if choice in ['1', '2', '3', '4']:
+        print('Voltage - 1 \n Pulse Time - 2, \n Rise - 3 \n Fall - 4 \n Pause - 5')
+        var = input('Select Index to Change: ')
+        return int(var) - 1
+
 
 def modify_pulse(choice, object):
     if choice != '4':
@@ -493,7 +495,7 @@ def modify_pulse(choice, object):
 
             if a == '1':
                 var1 = int(input('Input pulse number to edit: '))
-                var2 = get_index()
+                var2 = get_index(choice)
                 var3 = float(input('Enter new value: '))
                 object.editPulse(var1, var2, var3)
 
@@ -555,6 +557,31 @@ def ask_view_pulse(choice, object):
         print('Invalid choice')
         ask_view_pulse(choice, object)
 
+def ask_modify(choice, object):
+    while True:
+        print('1 - Modify Pulse')
+        print('2 - View Pulse')
+        print('3 - Export Pulse to File')
+        print('0 - Escape')
+        var = input('Select Choice: ')
+
+        if var == '1':
+            modify_pulse(choice, object)
+
+        if var == '2':
+            view_pulse(choice, object)
+
+        if var == '3':
+            export_pulse(object)
+            break
+
+        if var == '0':
+            break
+
+        else:
+            print('Invalid Selection')
+
+
 
 def run_app():
     while True:
@@ -564,9 +591,7 @@ def run_app():
         menu_num_p(choice, object)
         build_dict(object)
         view_pulse(choice, object)
-        modify_pulse(choice, object)
-        ask_view_pulse(choice, object)
-        export_pulse(object)
+        ask_modify(choice, object)
 
         a = input('Run Again? Y/N')
         if a.lower() == 'n':
