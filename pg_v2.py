@@ -612,3 +612,7 @@ def run_app():
 
 
 run_app()
+
+# Modulating pulse in Neuromorphic changes both read pusles.
+# Pulse Time for Neuromorphic
+# Repeats
