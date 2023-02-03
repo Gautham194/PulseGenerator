@@ -123,6 +123,10 @@ class NeuroPulse:
         self.times = [0, self.init_pause]
         self.volts = [0, 0]
 
+    def addPulse(self, arr):
+        self.numPulses += 1
+        self.pulseDict[str(self.numPulses)] = arr
+
     def viewPulse(self):
         plt.plot(self.times, self.volts)
         plt.show()
@@ -446,17 +450,17 @@ def set_base_params(choice, object):
         v2 = input('Enter Read V - ')
         v3 = input('Enter T - ')
         v4 = input('Enter Rise/Fall - ')
-        v5 = input('Enter Pause')
+        v5 = input('Enter Pause - ')
         object.setBaseParams(v4, v4, v5, v3, v1, v2)
     if choice == '2':
         v3 = input('Enter T - ')
         v4 = input('Enter Rise/Fall - ')
-        v5 = input('Enter Pause')
+        v5 = input('Enter Pause - ')
         object.setBaseParams(v4, v4, v5, v3)
     if choice == '3':
         v1 = input('Enter V - ')
         v4 = input('Enter Rise/Fall - ')
-        v5 = input('Enter Pause')
+        v5 = input('Enter Pause - ')
         object.setBaseParams(v4, v4, v5, v1)
 
 
@@ -471,7 +475,10 @@ def view_pulse(choice, object):
         a, b = object.buildArray()
         object.viewPulse()
         object.clearArray()
-
+    else:
+        a, b = object.buildArray()
+        object.viewPulse()
+        object.clearArray()
 
 def get_array():
     a = float(input('Input Voltage - '))
@@ -512,9 +519,9 @@ def modify_pulse(choice, object):
 
     if choice == '4':
         while True:
-            print('1 - Edit Single Pulse Value')
-            print('2 - Edit full pulse value')
-            print('2 - Add Pulse to end')
+            print('1 - Edit Single Pulse Parameter')
+            print('2 - Edit Multiple Pulse Parameters')
+            print('3 - Add Pulse to end')
             print('0 - Done.')
             a = input('Enter Option = ')
 
@@ -532,13 +539,13 @@ def modify_pulse(choice, object):
                 object.editPulse(var1, var2, var3)
 
             if a == '2':
-                arr = get_array()
                 var1 = int(input('Input pulse number to edit: '))
+                arr = get_array()
                 object.editPulseInd(var1, arr)
 
 
-def build_array(object):
-    v1, v2 = object.buildArray()
+def build_array(object, repeat_num):
+    v1, v2 = object.buildArray(repeats=repeat_num)
 
 
 def export_pulse(object):
@@ -551,6 +558,13 @@ def export_pulse(object):
 
         row = 0
         col = 0
+        while True:
+            b = input('Enter number of repeats: ')
+            if b == '0' or b.isnumeric() == False:
+                print('Invalid Response')
+            else:
+                object.buildArray(int(b))
+                break
 
         for time, volt in zip(object.times, object.volts):
             worksheet.write(row, col, time)
@@ -602,6 +616,7 @@ def run_app():
         object = initialise_class(choice)
         set_init_pause(object)
         menu_num_p(choice, object)
+        set_base_params(choice, object)
         build_dict(object)
         view_pulse(choice, object)
         ask_modify(choice, object)
@@ -616,3 +631,4 @@ run_app()
 # Modulating pulse in Neuromorphic changes both read pusles.
 # Pulse Time for Neuromorphic
 # Repeats
+# Neuro_time
